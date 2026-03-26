@@ -1,19 +1,13 @@
 ﻿import React, { useEffect, useMemo, useRef, useState } from 'react';
-import {
-  ArrowUpRight,
-  Bot,
+import {  Bot,
   Crown,
   GalleryVerticalEnd,
-  Mail,
-  MonitorPlay,
-  Sparkles,
+  Mail,  Sparkles,
   SwatchBook,
 } from 'lucide-react';
 import './App.css';
 
 const BASE_IMG_URL = 'https://cnb.cool/catfishzone/san-guo_agents/-/git/raw/main/task-002-imgs/';
-const SITE_URL = 'https://HelloWarcraft.github.io/my-portfolio/';
-
 const STATES = [
   {
     key: 'all',
@@ -78,9 +72,7 @@ const HIGHLIGHTS = [
 
 const INTRO_METRICS = [
   { label: '角色原画', value: '242', note: '涵盖君王、文臣、武将' },
-  { label: '设计方式', value: 'AI+', note: 'AI 设计与人工视觉统筹' },
-  { label: '托管方式', value: 'GitHub.io', note: '适配 GitHub Pages 部署' },
-];
+  { label: '设计方式', value: 'AI+', note: 'AI 设计与人工视觉统筹' },];
 
 function useReveal() {
   const ref = useRef(null);
@@ -175,13 +167,11 @@ function App() {
             </div>
             <h1>王道爵士 pengfeiwu@zju.edu.cn</h1>
             <p className="hero-summary">
-              以简洁优雅的视觉语言，整理战国七雄人物角色原画。页面保留丰富动画、精致图标与分组浏览体验，整体面向 GitHub.io 托管场景设计。
+              以简洁优雅的视觉语言，整理战国七雄人物角色原画。页面保留丰富动画、精致图标与分组浏览体验，让角色内容本身成为主视觉。
             </p>
             <div className="hero-tags">
               <span>视觉设计</span>
-              <span>AI设计角色原画</span>
-              <span>GitHub Pages Ready</span>
-            </div>
+              <span>AI设计角色原画</span>            </div>
           </div>
 
           <div className="hero-meta card-panel">
@@ -194,19 +184,6 @@ function App() {
                 所有人物图均以 636 × 900 竖幅 PNG 呈现，页面统一标注为“AI设计角色原画”，突出 AI 设计参与和后续人工视觉统筹。
               </p>
             </div>
-            <div className="meta-block">
-              <div className="eyebrow subtle">
-                <MonitorPlay size={16} />
-                <span>上线方式</span>
-              </div>
-              <p>
-                由于暂不配置独立域名，站点将直接发布到 GitHub 提供的 GitHub.io 地址，适合静态托管与持续更新。
-              </p>
-            </div>
-            <a className="hero-link" href={SITE_URL} target="_blank" rel="noreferrer">
-              访问 GitHub.io 站点
-              <ArrowUpRight size={16} />
-            </a>
           </div>
         </Reveal>
       </header>
@@ -320,7 +297,7 @@ function App() {
       <footer className="footer card-panel">
         <div>
           <strong>王道爵士</strong>
-          <p>视觉设计 / GitHub.io 发布版本</p>
+          <p>视觉设计 / 角色原画档案</p>
         </div>
         <a href="mailto:pengfeiwu@zju.edu.cn">
           <Mail size={16} />
@@ -332,3 +309,4 @@ function App() {
 }
 
 export default App;
+
