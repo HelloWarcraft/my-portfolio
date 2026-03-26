@@ -1,177 +1,334 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { 
-  Wand2, 
-  Image as ImageIcon 
+﻿import React, { useEffect, useMemo, useRef, useState } from 'react';
+import {
+  ArrowUpRight,
+  Bot,
+  Crown,
+  GalleryVerticalEnd,
+  Mail,
+  MonitorPlay,
+  Sparkles,
+  SwatchBook,
 } from 'lucide-react';
+import './App.css';
 
-// --- 数据区 ---
-const BASE_IMG_URL = "https://cnb.cool/catfishzone/san-guo_agents/-/git/raw/main/task-002-imgs/";
+const BASE_IMG_URL = 'https://cnb.cool/catfishzone/san-guo_agents/-/git/raw/main/task-002-imgs/';
+const SITE_URL = 'https://HelloWarcraft.github.io/my-portfolio/';
 
-// 抽取了约50%（126位）战国人物作为展示作品
-const SELECTED_CHARACTERS = [
-  "000_楚怀王", "002_楚考烈王", "004_楚哀王", "006_熊启", "008_景翠", "010_屈原", "012_昭鱼", "014_靳尚", "016_庄辛", "018_淖齿", "020_临武君", "022_李园", "024_朱英",
-  "025_项燕", "027_范增", "029_庄蹻", "031_景差", "033_韩襄王", "035_韩桓惠王", "037_陈筮", "039_韩公叔", "041_暴鸢", "043_韩侈", "045_张开地", "047_张平", "049_韩阳",
-  "050_韩非", "052_张良", "054_韩明", "056_韩熙", "058_齐襄王", "060_君王后", "062_匡章", "064_田文", "066_触子", "068_田骈", "070_吕礼", "072_太史敫", "074_苏厉",
-  "075_貂勃", "077_王孙贾", "079_邹克", "081_谭拾子", "083_鲁仲连", "085_秦昭襄王", "087_秦庄襄王", "089_芈八子", "091_魏冉", "093_嬴悝", "095_任鄙", "097_李崇", "099_寿烛",
-  "100_范雎", "102_杜仓", "104_甘罗", "106_顿弱", "108_茅焦", "110_赵高", "112_赵成", "114_冯去疾", "116_蒙毅", "118_白起", "120_尉缭", "122_郑安平", "124_张唐",
-  "125_胡阳", "127_蒙骜", "129_桓齮", "131_杨端和", "133_李信", "135_羌瘣", "137_冯毋择", "139_司马欣", "141_嫪毐", "143_魏襄王", "145_魏安釐王", "147_魏王假", "149_芒卯",
-  "150_魏齐", "152_龙阳君", "154_唐雎", "156_范座", "158_孔斌", "160_新垣衍", "162_朱亥", "164_陈余", "166_薛公", "168_燕昭王", "170_燕武成王", "172_燕王喜", "174_张魁",
-  "175_乐毅", "177_秦开", "179_公孙操", "181_剧辛", "183_蔡鸟", "185_卿秦", "187_鞠武", "189_田光", "191_荆轲", "193_燕市狗屠", "195_赵惠文王", "197_赵悼襄王", "199_代王嘉",
-  "200_肥义", "202_田不礼", "204_公子成", "206_赵威后", "208_长安君", "210_许历", "212_傅抵", "214_庞煖", "216_赵豹", "218_缪贤", "220_虞卿", "222_皮相国", "224_建信君",
-  "225_赵敖", "227_唐玖", "229_楼昌", "231_苏射", "233_王容", "235_司马尚", "237_颜聚", "239_乐乘", "241_魏加"
+const STATES = [
+  {
+    key: 'all',
+    label: '全部',
+    tone: '总览',
+    names: [],
+  },
+  {
+    key: 'chu',
+    label: '楚',
+    tone: '瑰丽深红',
+    names: ['楚怀王', '楚顷襄王', '楚考烈王', '楚幽王', '楚哀王', '楚王负刍', '熊启', '昭阳', '景翠', '唐昧', '屈原', '召滑', '昭鱼', '子兰', '靳尚', '陈轸', '庄辛', '景阳', '淖齿', '景鲤', '临武君', '黄歇', '李园', '李嫣', '朱英', '项燕', '项梁', '范增', '汗明', '庄蹻', '宋玉', '景差', '唐勒'],
+  },
+  {
+    key: 'han',
+    label: '韩',
+    tone: '墨金秩序',
+    names: ['韩襄王', '韩釐王', '韩桓惠王', '韩王安', '陈筮', '公仲侈', '韩公叔', '韩公仲', '暴鸢', '韩聂', '韩侈', '韩辰', '张开地', '冯亭', '张平', '靳黈', '韩阳', '韩非', '内史腾', '张良', '史疾', '韩明', '韩博', '韩熙'],
+  },
+  {
+    key: 'qi',
+    label: '齐',
+    tone: '青金理性',
+    names: ['齐湣王', '齐襄王', '齐王建', '君王后', '田婴', '匡章', '齐貌辨', '田文', '冯谖', '触子', '达子', '田骈', '尹文', '吕礼', '王蠋', '太史敫', '田单', '苏厉', '貂勃', '苏秦', '王孙贾', '后胜', '邹克', '田璆', '谭拾子', '淳于越', '鲁仲连', '邹衍'],
+  },
+  {
+    key: 'qin',
+    label: '秦',
+    tone: '鎏金黑曜',
+    names: ['秦昭襄王', '秦孝文王', '秦庄襄王', '秦王政', '芈八子', '司马错', '魏冉', '芈戎', '嬴悝', '嬴芾', '任鄙', '向寿', '李崇', '李瑶', '寿烛', '范雎', '蔡泽', '杜仓', '吕不韦', '甘罗', '姚贾', '顿弱', '司空马', '茅焦', '李斯', '赵高', '阎乐', '赵成', '陈驰', '冯去疾', '冯劫', '蒙毅', '喜', '白起', '司马靳', '尉缭', '王龁', '郑安平', '王陵', '张唐', '胡阳', '王翦', '蒙骜', '蒙武', '桓齮', '樊於期', '杨端和', '王贲', '李信', '辛胜', '羌瘣', '蒙恬', '冯毋择', '章邯', '司马欣', '董翳', '嫪毐', '成蟜'],
+  },
+  {
+    key: 'wei',
+    label: '魏',
+    tone: '琥珀暮色',
+    names: ['魏襄王', '魏昭王', '魏安釐王', '魏景湣王', '魏王假', '公孙衍', '芒卯', '魏齐', '魏无忌', '龙阳君', '晋鄙', '唐雎', '须贾', '范座', '段干崇', '孔斌', '缩高', '新垣衍', '侯嬴', '朱亥', '张耳', '陈余', '毛公', '薛公', '魏牟'],
+  },
+  {
+    key: 'yan',
+    label: '燕',
+    tone: '霜蓝锋芒',
+    names: ['燕昭王', '燕惠王', '燕武成王', '燕孝王', '燕王喜', '太子丹', '张魁', '乐毅', '郭隗', '秦开', '骑劫', '公孙操', '荣蚠', '剧辛', '乐间', '蔡鸟', '栗腹', '卿秦', '将渠', '鞠武', '宋意', '田光', '高渐离', '荆轲', '秦舞阳', '燕市狗屠'],
+  },
+  {
+    key: 'zhao',
+    label: '赵',
+    tone: '玉石银白',
+    names: ['赵武灵王', '赵惠文王', '赵孝成王', '赵悼襄王', '赵幽缪王', '代王嘉', '肥义', '赵章', '田不礼', '李兑', '公子成', '富丁', '赵威后', '触龙', '长安君', '赵奢', '许历', '廉颇', '傅抵', '赵括', '庞煖', '李牧', '赵豹', '赵胜', '缪贤', '蔺相如', '虞卿', '毛遂', '皮相国', '希写', '建信君', '赵敖', '郭开', '唐玖', '韩仓', '楼昌', '郑朱', '苏射', '傅豹', '王容', '李同', '司马尚', '赵葱', '颜聚', '扈辄', '乐乘', '庆舍', '魏加', '李左车'],
+  },
 ];
 
-const portfolioItems = SELECTED_CHARACTERS.map((item, index) => {
-  const name = item.split('_')[1];
-  return {
-    id: item,
-    title: name,
-    category: "AI辅助原画设计",
-    imgUrl: `${BASE_IMG_URL}${item}.png`,
-    delay: (index % 4) * 150 // 用于交错动画
-  };
-});
+const HIGHLIGHTS = [
+  '秦王政',
+  '屈原',
+  '韩非',
+  '白起',
+  '魏无忌',
+  '乐毅',
+  '蔺相如',
+  '李牧',
+];
 
-// --- 自定义 Hooks ---
-// 用于监听元素是否进入视口，实现滚动渐显动画
-const useIntersectionObserver = (options = {}) => {
-  const [isIntersecting, setIsIntersecting] = useState(false);
-  const targetRef = useRef(null);
+const INTRO_METRICS = [
+  { label: '角色原画', value: '242', note: '涵盖君王、文臣、武将' },
+  { label: '设计方式', value: 'AI+', note: 'AI 设计与人工视觉统筹' },
+  { label: '托管方式', value: 'GitHub.io', note: '适配 GitHub Pages 部署' },
+];
+
+function useReveal() {
+  const ref = useRef(null);
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
-        setIsIntersecting(true);
-        // 一旦显示，就取消观察，保持显示状态
-        if (targetRef.current) observer.unobserve(targetRef.current);
-      }
-    }, { threshold: 0.1, ...options });
+    const node = ref.current;
+    if (!node) return undefined;
 
-    const currentRef = targetRef.current;
-    if (currentRef) observer.observe(currentRef);
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          observer.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.16 },
+    );
 
-    return () => {
-      if (currentRef) observer.unobserve(currentRef);
-    };
-  }, [options]);
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
 
-  return [targetRef, isIntersecting];
-};
+  return [ref, visible];
+}
 
-// --- 组件区 ---
-
-// 渐显动画容器组件
-const FadeIn = ({ children, delay = 0, direction = 'up', className = "" }) => {
-  const [ref, isVisible] = useIntersectionObserver();
-  
-  const baseClasses = "transition-all duration-1000 ease-out";
-  const hiddenClasses = {
-    up: "opacity-0 translate-y-12",
-    down: "opacity-0 -translate-y-12",
-    left: "opacity-0 translate-x-12",
-    right: "opacity-0 -translate-x-12",
-    none: "opacity-0 scale-95"
-  };
-  
-  const visibleClasses = "opacity-100 translate-y-0 translate-x-0 scale-100";
+function Reveal({ children, className = '', delay = 0 }) {
+  const [ref, visible] = useReveal();
 
   return (
-    <div 
-      ref={ref} 
-      className={`${baseClasses} ${isVisible ? visibleClasses : hiddenClasses[direction]} ${className}`}
-      style={{ transitionDelay: `${delay}ms` }}
+    <div
+      ref={ref}
+      className={`reveal ${visible ? 'reveal-visible' : ''} ${className}`.trim()}
+      style={{ '--delay': `${delay}ms` }}
     >
       {children}
     </div>
   );
-};
+}
 
-// 作品卡片组件
-const PortfolioCard = ({ item }) => {
-  return (
-    <div className="group relative rounded-2xl overflow-hidden bg-zinc-900 shadow-2xl aspect-[636/900] cursor-pointer">
-      {/* 骨架屏底色 */}
-      <div className="absolute inset-0 bg-zinc-800 animate-pulse"></div>
-      
-      <img 
-        src={item.imgUrl} 
-        alt={item.title} 
-        loading="lazy"
-        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 z-10"
-        onError={(e) => {
-          e.target.onerror = null; 
-          e.target.src = "https://via.placeholder.com/636x900/18181b/f59e0b?text=Image+Not+Found";
-        }}
-      />
-      
-      {/* 渐变遮罩 */}
-      <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/50 to-transparent opacity-70 group-hover:opacity-90 transition-opacity duration-500 z-20"></div>
-      
-      {/* 悬浮内容 */}
-      <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-8 z-30 translate-y-6 group-hover:translate-y-0 transition-transform duration-500 ease-out">
-        <p className="text-amber-400 text-xs font-semibold tracking-wider mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100 border border-amber-400/30 bg-amber-400/10 w-max px-2 py-1 rounded">
-          {item.category}
-        </p>
-        <h3 className="text-2xl md:text-3xl font-bold text-white mb-2">{item.title}</h3>
-        
-        {/* 装饰线条 */}
-        <div className="w-0 h-0.5 bg-amber-500 group-hover:w-12 transition-all duration-700 ease-out delay-200 mt-2"></div>
-      </div>
-    </div>
+function buildCharacters() {
+  let index = 0;
+
+  return STATES.slice(1).flatMap((state) =>
+    state.names.map((name) => {
+      const code = String(index).padStart(3, '0');
+      index += 1;
+      return {
+        id: `${code}_${name}`,
+        code,
+        name,
+        stateKey: state.key,
+        stateLabel: `${state.label}国`,
+        tone: state.tone,
+        image: `${BASE_IMG_URL}${code}_${encodeURIComponent(name)}.png`,
+        note: 'AI设计角色原画',
+      };
+    }),
   );
-};
+}
 
-// 主应用组件 (极简画廊)
-export default function App() {
+const CHARACTERS = buildCharacters();
+
+function App() {
+  const [activeState, setActiveState] = useState('all');
+
+  const featuredCharacters = useMemo(
+    () => HIGHLIGHTS.map((name) => CHARACTERS.find((item) => item.name === name)).filter(Boolean),
+    [],
+  );
+
+  const galleryCharacters = useMemo(() => {
+    if (activeState === 'all') {
+      return CHARACTERS;
+    }
+
+    return CHARACTERS.filter((item) => item.stateKey === activeState);
+  }, [activeState]);
+
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-50 font-sans selection:bg-amber-500/30 selection:text-amber-200 py-16 md:py-24">
-      <div className="container mx-auto px-6">
-        
-        {/* 头部信息区 */}
-        <FadeIn>
-          <div className="mb-16 border-b border-white/10 pb-12 flex flex-col lg:flex-row justify-between items-start lg:items-end gap-10">
-            
-            {/* 个人介绍 */}
-            <div>
-              <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight mb-3">王道爵士</h1>
-              <p className="text-zinc-400 text-lg md:text-xl font-light mb-6">pengfeiwu@zju.edu.cn</p>
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-zinc-900 border border-white/10 text-amber-400 text-sm font-semibold tracking-widest">
-                <Wand2 size={16} />
-                <span>视觉设计师</span>
-              </div>
+    <div className="page-shell">
+      <div className="page-noise" aria-hidden="true" />
+      <header className="hero">
+        <div className="hero-backdrop hero-backdrop-left" aria-hidden="true" />
+        <div className="hero-backdrop hero-backdrop-right" aria-hidden="true" />
+
+        <Reveal className="hero-grid">
+          <div className="hero-copy card-panel card-panel-strong">
+            <div className="eyebrow">
+              <SwatchBook size={16} />
+              <span>视觉设计博客</span>
             </div>
-            
-            {/* 画廊介绍 */}
-            <div className="max-w-2xl lg:text-right">
-              <div className="flex items-center lg:justify-end gap-3 text-amber-500 mb-4">
-                <ImageIcon size={20} />
-                <span className="text-sm font-bold tracking-[0.2em] uppercase">AI-Assisted Artwork</span>
+            <h1>王道爵士 pengfeiwu@zju.edu.cn</h1>
+            <p className="hero-summary">
+              以简洁优雅的视觉语言，整理战国七雄人物角色原画。页面保留丰富动画、精致图标与分组浏览体验，整体面向 GitHub.io 托管场景设计。
+            </p>
+            <div className="hero-tags">
+              <span>视觉设计</span>
+              <span>AI设计角色原画</span>
+              <span>GitHub Pages Ready</span>
+            </div>
+          </div>
+
+          <div className="hero-meta card-panel">
+            <div className="meta-block">
+              <div className="eyebrow subtle">
+                <Bot size={16} />
+                <span>角色原画说明</span>
               </div>
-              <h2 className="text-3xl font-bold text-white mb-4">战国风云录 <span className="text-zinc-600 font-light">| 角色原画</span></h2>
-              <p className="text-zinc-400 leading-relaxed text-base md:text-lg">
-                以历史为骨，结合现代 <span className="text-amber-400 font-medium">AI 生成与辅助设计技法</span>，重新诠释战国七雄时期君王与名臣武将的视觉风貌。
+              <p>
+                所有人物图均以 636 × 900 竖幅 PNG 呈现，页面统一标注为“AI设计角色原画”，突出 AI 设计参与和后续人工视觉统筹。
               </p>
             </div>
-            
+            <div className="meta-block">
+              <div className="eyebrow subtle">
+                <MonitorPlay size={16} />
+                <span>上线方式</span>
+              </div>
+              <p>
+                由于暂不配置独立域名，站点将直接发布到 GitHub 提供的 GitHub.io 地址，适合静态托管与持续更新。
+              </p>
+            </div>
+            <a className="hero-link" href={SITE_URL} target="_blank" rel="noreferrer">
+              访问 GitHub.io 站点
+              <ArrowUpRight size={16} />
+            </a>
           </div>
-        </FadeIn>
+        </Reveal>
+      </header>
 
-        {/* 瀑布流/网格布局区 */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
-          {portfolioItems.map((item) => (
-            <FadeIn key={item.id} delay={item.delay} direction="up">
-              <PortfolioCard item={item} />
-            </FadeIn>
+      <main className="content-shell">
+        <section className="metrics-grid">
+          {INTRO_METRICS.map((metric, index) => (
+            <Reveal key={metric.label} delay={index * 90}>
+              <article className="metric-card card-panel">
+                <span>{metric.label}</span>
+                <strong>{metric.value}</strong>
+                <p>{metric.note}</p>
+              </article>
+            </Reveal>
           ))}
-        </div>
-        
-        {/* 极简底部 */}
-        <FadeIn delay={300}>
-          <div className="mt-20 text-center text-zinc-600 text-sm">
-            © {new Date().getFullYear()} 王道爵士. All rights reserved.
+        </section>
+
+        <section className="section-block">
+          <Reveal className="section-heading" delay={80}>
+            <div>
+              <div className="eyebrow subtle">
+                <Sparkles size={16} />
+                <span>精选陈列</span>
+              </div>
+              <h2>君王、文臣与武将的视觉切片</h2>
+            </div>
+            <p>
+              用更克制的排版承载更丰富的色彩，让角色本身成为页面的主视觉，同时保留轻盈的动态反馈和高级感层次。
+            </p>
+          </Reveal>
+
+          <div className="featured-grid">
+            {featuredCharacters.map((item, index) => (
+              <Reveal key={item.id} delay={index * 80}>
+                <article className="featured-card">
+                  <img src={item.image} alt={item.name} loading="lazy" />
+                  <div className="featured-overlay" />
+                  <div className="featured-copy">
+                    <span>{item.stateLabel}</span>
+                    <h3>{item.name}</h3>
+                    <p>{item.note}</p>
+                  </div>
+                </article>
+              </Reveal>
+            ))}
           </div>
-        </FadeIn>
-      </div>
+        </section>
+
+        <section className="section-block">
+          <Reveal className="section-heading" delay={100}>
+            <div>
+              <div className="eyebrow subtle">
+                <GalleryVerticalEnd size={16} />
+                <span>角色画廊</span>
+              </div>
+              <h2>战国七雄人物档案</h2>
+            </div>
+            <p>
+              可以按国家筛选查看。人物介绍统一保持“王道爵士 pengfeiwu@zju.edu.cn”，职业身份仅展示为视觉设计。
+            </p>
+          </Reveal>
+
+          <Reveal delay={140}>
+            <div className="filter-bar card-panel">
+              {STATES.map((state) => (
+                <button
+                  key={state.key}
+                  type="button"
+                  className={state.key === activeState ? 'filter-chip active' : 'filter-chip'}
+                  onClick={() => setActiveState(state.key)}
+                >
+                  {state.label}
+                </button>
+              ))}
+            </div>
+          </Reveal>
+
+          <div className="gallery-grid">
+            {galleryCharacters.map((item, index) => (
+              <Reveal key={`${activeState}-${item.id}`} delay={(index % 12) * 35}>
+                <article className="gallery-card">
+                  <div className="gallery-image-wrap">
+                    <img src={item.image} alt={item.name} loading="lazy" />
+                    <div className="gallery-glow" aria-hidden="true" />
+                  </div>
+                  <div className="gallery-copy">
+                    <div className="gallery-topline">
+                      <span>{item.stateLabel}</span>
+                      <span>{item.code}</span>
+                    </div>
+                    <h3>{item.name}</h3>
+                    <p>王道爵士 pengfeiwu@zju.edu.cn</p>
+                    <div className="gallery-meta">
+                      <span>
+                        <Crown size={14} />
+                        视觉设计
+                      </span>
+                      <span>
+                        <Bot size={14} />
+                        {item.note}
+                      </span>
+                    </div>
+                  </div>
+                </article>
+              </Reveal>
+            ))}
+          </div>
+        </section>
+      </main>
+
+      <footer className="footer card-panel">
+        <div>
+          <strong>王道爵士</strong>
+          <p>视觉设计 / GitHub.io 发布版本</p>
+        </div>
+        <a href="mailto:pengfeiwu@zju.edu.cn">
+          <Mail size={16} />
+          pengfeiwu@zju.edu.cn
+        </a>
+      </footer>
     </div>
   );
 }
+
+export default App;
