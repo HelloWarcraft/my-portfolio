@@ -165,9 +165,14 @@ function App() {
               <SwatchBook size={16} />
               <span>视觉设计博客</span>
             </div>
-            <h1>王道爵士 pengfeiwu@zju.edu.cn</h1>
+            <h1>
+            王道爵士 
+            </h1>
+            <h4>
+            pengfeiwu@zju.edu.cn 
+            </h4>
             <p className="hero-summary">
-              以简洁优雅的视觉语言，整理战国七雄人物角色原画。页面保留丰富动画、精致图标与分组浏览体验，让角色内容本身成为主视觉。
+              以简洁优雅的视觉语言，整理战国七雄人物角色原画。
             </p>
             <div className="hero-tags">
               <span>视觉设计</span>
@@ -181,7 +186,10 @@ function App() {
                 <span>角色原画说明</span>
               </div>
               <p>
-                所有人物图均以 636 × 900 竖幅 PNG 呈现，页面统一标注为“AI设计角色原画”，突出 AI 设计参与和后续人工视觉统筹。
+                所有人物图均以 3 : 4 竖幅 PNG 呈现，
+              </p>
+              <p>
+                展示 AI 设计效果和后续人工视觉统筹。
               </p>
             </div>
           </div>
@@ -210,9 +218,6 @@ function App() {
               </div>
               <h2>君王、文臣与武将的视觉切片</h2>
             </div>
-            <p>
-              用更克制的排版承载更丰富的色彩，让角色本身成为页面的主视觉，同时保留轻盈的动态反馈和高级感层次。
-            </p>
           </Reveal>
 
           <div className="featured-grid">
@@ -242,7 +247,7 @@ function App() {
               <h2>战国七雄人物档案</h2>
             </div>
             <p>
-              可以按国家筛选查看。人物介绍统一保持“王道爵士 pengfeiwu@zju.edu.cn”，职业身份仅展示为视觉设计。
+              可以按国家筛选查看。
             </p>
           </Reveal>
 
@@ -275,7 +280,7 @@ function App() {
                       <span>{item.code}</span>
                     </div>
                     <h3>{item.name}</h3>
-                    <p>王道爵士 pengfeiwu@zju.edu.cn</p>
+                    <p>王道爵士</p>
                     <div className="gallery-meta">
                       <span>
                         <Crown size={14} />
