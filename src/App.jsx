@@ -213,11 +213,11 @@ const HIGHLIGHTS = [
   '赵武灵王',
   '屈原',
   '韩非',
-  '白起',
+  '蒙武',
   '魏无忌',
-  '乐毅',
-  '蔺相如',
-  '李牧',
+  '骑劫',
+  '芈八子',
+  '田单',
 ];
 
 const INTRO_METRICS = [
@@ -278,7 +278,7 @@ function Reveal({ children, className = '', delay = 0 }) {
 //         stateLabel: `${state.label}国`,
 //         tone: state.tone,
 //         image: `${BASE_IMG_URL}${code}_${encodeURIComponent(name)}.png`,
-//         note: 'AI设计角色原画',
+//         note: '原创角色·AI辅助设计',
 //       };
 //     }),
 //   );
@@ -295,7 +295,7 @@ function buildCharacters() {
         stateLabel: `${state.label}国`,
         tone: state.tone,
         image: `${BASE_IMG_URL}${code}_${encodeURIComponent(name)}.png`,
-        note: 'AI设计角色原画',
+        note: '原创角色·AI辅助设计',
       };
     }),
   );
@@ -343,7 +343,7 @@ function App() {
             </p>
             <div className="hero-tags">
               <span>视觉设计</span>
-              <span>AI设计角色原画</span>            </div>
+              <span>原创角色·AI辅助设计</span>            </div>
           </div>
 
           <div className="hero-meta card-panel">
