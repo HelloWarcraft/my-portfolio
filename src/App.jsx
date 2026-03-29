@@ -391,7 +391,16 @@ function App() {
             {featuredCharacters.map((item, index) => (
               <Reveal key={item.id} delay={index * 80}>
                 <article className="featured-card">
-                  <img src={item.image} alt={item.name} loading="lazy" />
+                  <img 
+                    src={item.image} 
+                    alt={item.name} 
+                    loading="lazy" 
+                    
+                    onContextMenu={(e) => e.preventDefault()}
+                    draggable="false"
+                    onDragStart={(e) => e.preventDefault()}
+                    className="select-none pointer-events-none"
+                  />
                   <div className="featured-overlay" />
                   <div className="featured-copy">
                     <span>{item.stateLabel}</span>
