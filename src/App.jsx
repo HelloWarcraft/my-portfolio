@@ -221,7 +221,7 @@ const HIGHLIGHTS = [
 ];
 
 const INTRO_METRICS = [
-  { label: '角色原画', value: '242', note: '涵盖君王、文臣、武将' },
+  { label: '角色原画', value: '266', note: '涵盖君王、文臣、武将' },
   { label: '设计方式', value: 'AI+', note: 'AI 设计与人工视觉统筹' },];
 
 function useReveal() {
