@@ -221,7 +221,7 @@ const HIGHLIGHTS = [
 ];
 
 const INTRO_METRICS = [
-  { label: '角色原画', value: '266', note: '涵盖君王、文臣、武将' },
+  { label: '原创角色', value: '266', note: '涵盖君王、文臣、武将' },
   { label: '设计方式', value: 'AI+', note: 'AI 设计与人工视觉统筹' },];
 
 function useReveal() {
@@ -339,7 +339,7 @@ function App() {
             core2023@qq.com 
             </h4>
             <p className="hero-summary">
-              以简洁优雅的视觉语言，以颜色划分阵营，以道具和动作划分性格与身份，呈现战国七雄人物群像。
+              以简洁优雅的视觉语言，以颜色划分阵营，以道具和动作划分性格与身份，呈现战国后期的七国历史人物群像。
             </p>
             <div className="hero-tags">
               <span>视觉设计</span>
@@ -350,7 +350,7 @@ function App() {
             <div className="meta-block">
               <div className="eyebrow subtle">
                 <Bot size={16} />
-                <span>角色原画说明</span>
+                <span>原创角色说明</span>
               </div>
               <p>
                 展示 AI 设计效果和后续人工视觉统筹，
@@ -489,7 +489,7 @@ function App() {
       <footer className="footer card-panel">
         <div>
           <strong>王道爵士</strong>
-          <p>视觉设计 / 角色原画档案</p>
+          <p>视觉设计 / 原创角色档案</p>
         </div>
         <a href="mailto:core2023@qq.com">
           <Mail size={16} />
