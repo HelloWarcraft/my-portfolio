@@ -339,7 +339,7 @@ function App() {
             core2023@qq.com 
             </h4>
             <p className="hero-summary">
-              以简洁优雅的视觉语言，整理战国七雄人物角色原画。
+              以简洁优雅的视觉语言，以颜色划分阵营，以道具和动作划分性格与身份，呈现战国七雄人物群像。
             </p>
             <div className="hero-tags">
               <span>视觉设计</span>
@@ -353,10 +353,13 @@ function App() {
                 <span>角色原画说明</span>
               </div>
               <p>
-                所有人物图均以 3 : 4 竖幅 PNG 呈现，
+                展示 AI 设计效果和后续人工视觉统筹，
               </p>
               <p>
-                展示 AI 设计效果和后续人工视觉统筹。
+                承接光荣三国志的厚涂写实插画风格，
+              </p>
+              <p>
+                参考汉服里的直裾袍(战国袍)、汉甲里的宋制盔甲，进行多样化设计。
               </p>
             </div>
           </div>
@@ -447,7 +450,15 @@ function App() {
               <Reveal key={`${activeState}-${item.id}`} delay={(index % 12) * 35}>
                 <article className="gallery-card">
                   <div className="gallery-image-wrap">
-                    <img src={item.image} alt={item.name} loading="lazy" />
+                  <img 
+                      src={item.image} 
+                      alt={item.name} 
+                      loading="lazy" 
+                      onContextMenu={(e) => e.preventDefault()}
+                      draggable="false"
+                      onDragStart={(e) => e.preventDefault()}
+                      className="select-none pointer-events-none"
+                    />
                     <div className="gallery-glow" aria-hidden="true" />
                   </div>
                   <div className="gallery-copy">
